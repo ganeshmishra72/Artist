@@ -22,5 +22,5 @@ It includes essential modern libraries for UI design, routing, animations, and u
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
+   git clone <https://github.com/ganeshmishra72/Artis>
    cd <your-project-folder>
