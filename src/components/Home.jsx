@@ -1,57 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from './Layout'
+import firebaseartist from '../firebase/firebaseartist-config'
+import { getFirestore, getDocs, collection } from 'firebase/firestore'
 
+const db = getFirestore(firebaseartist)
 const Home = () => {
-    const arts = [
-        {
-            img: 'bg.avif',
-            name: 'Abstract ',
-            categroy: 'Digital Artist',
-            price: '1000.00'
 
-
-        },
-        {
-            img: 'bg.avif',
-            name: 'Abstract',
-            categroy: 'Digital Artist',
-            price: '1000.00'
-
-
-        },
-        {
-            img: 'bg.avif',
-            name: 'Abstract',
-            categroy: 'Digital Artist',
-            price: '1000.00'
-
-
-        },
-        {
-            img: 'bg.avif',
-            name: 'Abstract',
-            categroy: 'Digital Artist',
-            price: '1000.00'
-
-
-        },
-        {
-            img: 'bg.avif',
-            name: 'Abstract',
-            categroy: 'Digital Artist',
-            price: '1000.00'
-
-
-        },
-        {
-            img: 'bg.avif',
-            name: 'Abstract',
-            categroy: 'Digital Artist',
-            price: '1000.00'
-
-
-        }
-    ]
 
     const artist = [
         {
@@ -91,6 +45,22 @@ const Home = () => {
             expert: 'Tattot Master'
         }
     ]
+    const [arts, setArts] = useState([])
+
+    useEffect(() => {
+        const req = async () => {
+            const getData = await getDocs(collection(db, 'artsData'))
+            let temp = []
+            getData.forEach((docs) => {
+                const documnet = docs.data()
+                documnet.id = docs.id
+                temp.push(documnet)
+            })
+            setArts(temp)
+        }
+        req()
+    }, [])
+
     return (
         <Layout>
             {
@@ -114,10 +84,10 @@ const Home = () => {
                             {
                                 arts.map((item, id) => (
                                     <div key={id} className='bg-[#1e293b] rounded-2xl overflow-hidden shadow-lg hover:scale-105 hover:shadow-indigo-500/30 transition-all duration-300 flex gap-4 flex-col'>
-                                        <img src={item.img} alt="" className='w-full   rounded-t-xl' />
+                                        <img src={item.imageUrl} alt="" className='w-full   rounded-t-xl' />
                                         <div className='p-4'>
-                                            <p className='text-white  text-xl font-semibold'>{item.name} </p>
-                                            <p class="text-sm text-gray-400 uppercase tracking-wide">{item.categroy}</p>
+                                            <p className='text-white  text-xl font-semibold'>{item.title} </p>
+                                            <p class="text-sm text-gray-400 uppercase tracking-wide">{item.category}</p>
                                             <p className='text-gray-400  '>₹{item.price}</p>
                                         </div>
                                         <div className='flex '>

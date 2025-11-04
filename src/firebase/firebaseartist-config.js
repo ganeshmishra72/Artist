@@ -1,17 +1,17 @@
  
 import { initializeApp } from "firebase/app";
  
+ 
 const firebaseConfig = {
-  apiKey: "AIzaSyDVoyH0zofObZsHVX-wF_FdinsNxMhBKUE",
-  authDomain: "fir-crud-897e0.firebaseapp.com",
-  projectId: "fir-crud-897e0",
-  storageBucket: "fir-crud-897e0.firebasestorage.app",
-  messagingSenderId: "138067843529",
-  appId: "1:138067843529:web:aaf6f2c8c365953cc83018",
-  measurementId: "G-0ENLWM6TYG"
+  apiKey: "AIzaSyDY7hwGKvvnuSZMStKpnHs4C_V7pwGrWk4",
+  authDomain: "artist-2bba0.firebaseapp.com",
+  projectId: "artist-2bba0",
+  storageBucket: "artist-2bba0.firebasestorage.app",
+  messagingSenderId: "844577400041",
+  appId: "1:844577400041:web:ce48cb6e386f86f391fc78",
+  measurementId: "G-Z7HYQ6DZNL"
 };
 
 // Initialize Firebase
 const firebaseartist = initializeApp(firebaseConfig);
-export default firebaseartist;
- 
+export  default firebaseartist

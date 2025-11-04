@@ -1,27 +1,17 @@
 // ExploreArtworks.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
 import { motion } from "framer-motion";
 import { Link } from 'react-router-dom';
-const artworksData = [
-    { id: 1, title: "Sunset Bliss", category: "Nature", price: "50", image: "/artist.jpeg" },
-    { id: 2, title: "Abstract Mind", category: "Abstract", price: "75", image: "/artist.jpeg" },
-    { id: 3, title: "City Lights", category: "Urban", price: "100", image: "/artist.jpeg" },
-    { id: 4, title: "Ocean Dreams", category: "Nature", price: "60", image: "/artist.jpeg" },
-    { id: 1, title: "Sunset Bliss", category: "Nature", price: "50", image: "/artist.jpeg" },
-    { id: 2, title: "Abstract Mind", category: "Abstract", price: "75", image: "/artist.jpeg" },
-    { id: 3, title: "City Lights", category: "Urban", price: "100", image: "/artist.jpeg" },
-    { id: 4, title: "Ocean Dreams", category: "Nature", price: "60", image: "/artist.jpeg" },
-    { id: 1, title: "Sunset Bliss", category: "Nature", price: "50", image: "/artist.jpeg" },
-    { id: 2, title: "Abstract Mind", category: "Abstract", price: "75", image: "/artist.jpeg" },
-    { id: 3, title: "City Lights", category: "Urban", price: "100", image: "/artist.jpeg" },
-    { id: 4, title: "Ocean Dreams", category: "Nature", price: "60", image: "/artist.jpeg" }
+import firebaseartist from '../firebase/firebaseartist-config'
+import { getFirestore, getDocs, collection } from 'firebase/firestore'
 
+const db = getFirestore(firebaseartist)
 
-];
 
 const Explore = () => {
     const [search, setSearch] = useState('');
+    const [artworksData, setartworksData] = useState([])
     const [category, setCategory] = useState('All');
     const [sort, setSort] = useState('Newest');
 
@@ -59,6 +49,21 @@ const Explore = () => {
             title: "Added To Favorite"
         })
     }
+
+
+    useEffect(() => {
+        const req = async () => {
+            const getData = await getDocs(collection(db, 'artsData'))
+            let temp = []
+            getData.forEach((docs) => {
+                const documnet = docs.data()
+                documnet.id = docs.id
+                temp.push(documnet)
+            })
+            setartworksData(temp)
+        }
+        req()
+    }, [])
     return (
         <Layout>
             {
@@ -122,7 +127,7 @@ const Explore = () => {
                             >
 
                                 <img
-                                    src={art.image}
+                                    src={art.imageUrl}
                                     alt={art.title}
                                     className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
                                 />

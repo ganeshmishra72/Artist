@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
     return (
         <>
 
-            <div className='md:block hidden h-screen bg-gray-100'>
+            <div className='md:block hidden min-h-full  '>
                 <aside className='bg-cyan-600 h-full fixed top-0 left-0   overflow-hidden'>
                     <div className='mt-4 px-2 flex flex-col gap-4'>
                         {
@@ -53,7 +53,7 @@ const Layout = ({ children }) => {
                     </div>
                 </aside>
                 <section className='ml-14'>
-                    <nav className='bg-white shadow-lg sticky top-0 left-0'>
+                    <nav className='bg-white shadow-lg sticky top-0 left-0 z-10'>
                         <div className='flex items-center px-4  justify-between'>
                             <img src={logo} className='w-20' />
                             <div className='py-2 flex gap-2'>
@@ -73,10 +73,10 @@ const Layout = ({ children }) => {
 
             {/* mobile view */}
 
-            <div className='md:hidden  h-screen bg-gray-100'>
+            <div className='md:hidden  h-screen  '>
                 {
                     sidebar &&
-                    <aside className='bg-cyan-600 h-full fixed top-0 left-0 z-10 overflow-hidden '>
+                    <aside className='bg-cyan-600 h-full fixed top-0 left-0 z-20 overflow-hidden '>
 
                         <div className='mt-4 px-2 flex flex-col gap-4'>
                             {
@@ -95,7 +95,7 @@ const Layout = ({ children }) => {
                     </aside>
                 }
                 <section  >
-                    <nav className='bg-white shadow-lg sticky top-0 left-0'>
+                    <nav className='bg-white shadow-lg sticky top-0 left-0 z-10'>
                         <div className='flex items-center p-4 justify-between'>
                             <img src={logo} className='w-20' />
                             {
