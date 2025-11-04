@@ -10,8 +10,13 @@ import Preguard from './guard/PreGuard'
 import Home from './components/Home'
 import Explore from './components/Explore'
 import Artist from './components/Artist'
+import Art from './Admin/Art'
+import AdminArtist from './Admin/AdminArtist'
+import Setting from './Admin/Setting'
+import Orders from './Admin/Orders'
 import Contact from './components/Contact'
-import Layout from './Admin/Layout'
+
+import Dashboard from './Admin/Dashboard'
 
 const App = () => {
   return (
@@ -26,7 +31,14 @@ const App = () => {
         <Route path='/artist' element={<Artist />} />
         <Route path='/contact' element={<Contact />} />
 
-        <Route path='admin' element={<Layout />} />
+
+        <Route path='/admin' >
+          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='arts' element={<Art />} />
+          <Route path='adminartist' element={<AdminArtist />} />
+          <Route path='setting' element={<Setting />} />
+          <Route path='orders' element={<Orders />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

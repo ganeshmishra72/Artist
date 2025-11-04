@@ -2,32 +2,29 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '/logo.png'
 import profile from '/ganesh.jpg'
-const Layout = () => {
+const Layout = ({ children }) => {
     const menu = [
         {
             logo: <i className='ri-dashboard-line'></i>,
-            herf: '/dashboard'
+            herf: '/admin/dashboard'
         },
         {
             logo: <i className='ri-bar-chart-box-ai-line'></i>,
-            herf: '/artwork'
+            herf: '/admin/arts'
         },
         {
             logo: <i className='ri-user-3-line '></i>,
-            herf: '/artist'
+            herf: '/admin/adminartist'
         },
         {
             logo: <i className='ri-shopping-cart-2-line'></i>,
-            herf: '/orders'
+            herf: '/admin/orders'
         },
         {
             logo: <i className='ri-tools-line'></i>,
-            herf: '/setting'
-        },
-        {
-            logo: <i className='ri-logout-circle-line'></i>,
-            herf: '/logout'
-        },
+            herf: '/admin/setting'
+        }
+
     ]
     return (
         <div className='h-screen bg-gray-100'>
@@ -42,10 +39,13 @@ const Layout = () => {
                             </Link>
                         ))
                     }
+                    <button className='text-2xl text-white px-2 py-2 hover:bg-white hover:text-cyan-600 transition-all duration-200 rounded-lg cursor-pointer'>
+                        <i className='ri-logout-circle-line'></i>
+                    </button>
                 </div>
             </aside>
-            <section>
-                <nav className='bg-white shadow-lg  ml-14'>
+            <section className='ml-14'>
+                <nav className='bg-white shadow-lg  '>
                     <div className='flex items-center px-4  justify-between'>
                         <img src={logo} className='w-20' />
                         <div className='py-2 flex gap-2'>
@@ -57,6 +57,9 @@ const Layout = () => {
                         </div>
                     </div>
                 </nav>
+                {
+                    children
+                }
             </section>
         </div>
     )
