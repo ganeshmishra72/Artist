@@ -11,6 +11,7 @@ import Home from './components/Home'
 import Explore from './components/Explore'
 import Artist from './components/Artist'
 import Contact from './components/Contact'
+import Layout from './Admin/Layout'
 
 const App = () => {
   return (
@@ -24,6 +25,8 @@ const App = () => {
         <Route path='/explore' element={<Explore />} />
         <Route path='/artist' element={<Artist />} />
         <Route path='/contact' element={<Contact />} />
+
+        <Route path='admin' element={<Layout />} />
       </Routes>
     </BrowserRouter>
   )

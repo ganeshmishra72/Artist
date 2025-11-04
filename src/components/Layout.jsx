@@ -87,7 +87,7 @@ const Layout = ({ children }) => {
                                 </button>
                                 {
                                     isDailog &&
-                                    <div className='border border-slate-500 rounded-lg shadow py-6 px-4  absolute right-3 top-15 animate__animated animate__zoomIn text-center text-white '>
+                                    <div className='border border-slate-500 bg-slate-800 rounded-lg shadow py-6 px-4  absolute right-3 top-15 animate__animated animate__zoomIn text-center text-white '>
                                         <p className='text-xl capitalize'>{session.displayname ? session.displayname : "Admin"}</p>
                                         <p>{session.email}</p>
                                         <button onClick={() => signOut(auth)}>
