@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
 import { motion } from "framer-motion";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import firebaseartist from '../firebase/firebaseartist-config'
 import { getFirestore, getDocs, collection } from 'firebase/firestore'
 
@@ -10,6 +10,7 @@ const db = getFirestore(firebaseartist)
 
 
 const Explore = () => {
+    const navigate = useNavigate()
     const [search, setSearch] = useState('');
     const [artworksData, setartworksData] = useState([])
     const [category, setCategory] = useState('All');
@@ -144,7 +145,7 @@ const Explore = () => {
                                     </h2>
                                     <p className="text-sm text-gray-300">{art.category}</p>
                                     <p className="mt-2 text-indigo-400 font-bold text-lg">₹{art.price}</p>
-                                    <button className="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-md text-white text-sm transition">
+                                    <button onClick={() => navigate(`/art/${art.id}`)} className="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-md text-white text-sm transition">
                                         View Details
                                     </button>
                                 </div>

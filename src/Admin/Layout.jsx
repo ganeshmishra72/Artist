@@ -1,7 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '/logo.png'
-import profile from '/ganesh.jpg'
+import profile from '/avatr.svg'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
+import firebaseartist from '../firebase/firebaseartist-config'
+import { getFirestore, getDocs, collection, query, where } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
+
+const auth = getAuth(firebaseartist)
+const db = getFirestore(firebaseartist)
 const Layout = ({ children }) => {
     const menu = [
         {
@@ -32,6 +39,39 @@ const Layout = ({ children }) => {
 
     ]
     const [sidebar, setSidebar] = useState(false)
+    const [adminData, setAdminData] = useState([])
+    const [session, setSession] = useState(null);
+
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setSession(user)
+            }
+            else {
+                setSession(false)
+            }
+        })
+    }, [])
+
+    useEffect(() => {
+        if (session) {
+
+            const req = async () => {
+                const col = collection(db, 'users')
+                const q = query(col, where('customerId', '==', session.uid))
+                const sanpshot = await getDocs(q)
+                sanpshot.forEach((docs) => {
+                    const document = docs.data()
+                    setAdminData(document)
+                })
+            }
+            req()
+        }
+    }, [session])
+
+
+
     return (
         <>
 
@@ -47,7 +87,7 @@ const Layout = ({ children }) => {
                                 </Link>
                             ))
                         }
-                        <button className='text-2xl text-white px-2 py-2 hover:bg-white hover:text-cyan-600 transition-all duration-200 rounded-lg cursor-pointer'>
+                        <button onClick={() => signOut(auth)} className='text-2xl text-white px-2 py-2 hover:bg-white hover:text-cyan-600 transition-all duration-200 rounded-lg cursor-pointer'>
                             <i className='ri-logout-circle-line'></i>
                         </button>
                     </div>
@@ -59,8 +99,8 @@ const Layout = ({ children }) => {
                             <div className='py-2 flex gap-2'>
                                 <img src={profile} className='w-12 rounded-full object-center' />
                                 <div className='flex flex-col text-left'>
-                                    <p className='text-lg font-bold'>Ganesh Mishra</p>
-                                    <span className='text-gray-500'>ganesh@gamil.com</span>
+                                    <p className='text-lg font-bold'>Admin</p>
+                                    <span className='text-gray-500'>{adminData.email || 'admin@gmail.com'}</span>
                                 </div>
                             </div>
                         </div>

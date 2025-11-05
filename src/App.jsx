@@ -17,6 +17,11 @@ import Orders from './Admin/Orders'
 import Contact from './components/Contact'
 
 import Dashboard from './Admin/Dashboard'
+import Profile from './components/Profile'
+import AdminGuard from './guard/Adminguard'
+import ArtDetails from './Details/ArtDetails'
+import ArtistDetails from './Details/ArtistDetails'
+import Cart from './components/Cart'
 
 const App = () => {
   return (
@@ -30,14 +35,20 @@ const App = () => {
         <Route path='/explore' element={<Explore />} />
         <Route path='/artist' element={<Artist />} />
         <Route path='/contact' element={<Contact />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/cart' element={<Cart />} />
 
+        <Route path='/art/:id' element={<ArtDetails />} />
+        <Route path='/artist/:id' element={<ArtistDetails />} />
 
-        <Route path='/admin' >
-          <Route path='dashboard' element={<Dashboard />} />
-          <Route path='arts' element={<Art />} />
-          <Route path='adminartist' element={<AdminArtist />} />
-          <Route path='setting' element={<Setting />} />
-          <Route path='orders' element={<Orders />} />
+        <Route element={<AdminGuard />}>
+          <Route path='/admin' >
+            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='arts' element={<Art />} />
+            <Route path='adminartist' element={<AdminArtist />} />
+            <Route path='setting' element={<Setting />} />
+            <Route path='orders' element={<Orders />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

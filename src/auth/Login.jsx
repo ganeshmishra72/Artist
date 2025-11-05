@@ -31,11 +31,6 @@ const Login = () => {
             const signupData = await signInWithEmailAndPassword(auth, fromValue.email, fromValue.password)
             navigate('/')
 
-            new swal({
-                icon: 'success',
-                title: 'Succesfully Login'
-
-            })
 
         } catch (error) {
             new swal({

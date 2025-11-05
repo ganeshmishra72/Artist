@@ -1,39 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from './Layout'
+import firebaseartist from '../firebase/firebaseartist-config'
+import { getFirestore, collection, getDocs, addDoc, query, where, doc, deleteDoc, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth';
+import moment from 'moment'
 
+
+const db = getFirestore(firebaseartist)
+const auth = getAuth(firebaseartist)
 const Orders = () => {
-    const orders = [
-        {
-            id: "ORD001",
-            name: "John Doe",
-            email: "john@example.com",
-            address: "123 Street, New York",
-            product: "Wireless Headphones",
-            price: "$120",
-            time: "2025-11-04 10:30 AM",
-            status: "Delivered",
-        },
-        {
-            id: "ORD002",
-            name: "Alice Smith",
-            email: "alice@example.com",
-            address: "456 Avenue, London",
-            product: "Smart Watch",
-            price: "$180",
-            time: "2025-11-04 12:00 PM",
-            status: "Pending",
-        },
-        {
-            id: "ORD003",
-            name: "Michael Lee",
-            email: "michael@example.com",
-            address: "789 Park Road, Sydney",
-            product: "Bluetooth Speaker",
-            price: "$95",
-            time: "2025-11-03 9:45 PM",
-            status: "Shipped",
-        },
-    ];
+    const [orders, setOrder] = useState([])
+
+    useEffect(() => {
+        const req = async () => {
+            const data = await getDocs(collection(db, 'orders'))
+            let temp = []
+            data.forEach((docs) => {
+                temp.push({ id: docs.id, ...docs.data() });
+
+            })
+            setOrder(temp)
+        }
+        req()
+    }, [])
+
+    console.log(orders);
 
     return (
         <Layout>
@@ -55,7 +46,7 @@ const Orders = () => {
                                 </div>
                                 <div className="mb-2">
                                     <span className="font-semibold text-gray-700">Customer:</span>{" "}
-                                    <span className="text-gray-600">{order.name}</span>
+                                    <span className="text-gray-600">{order.customerName}</span>
                                 </div>
                                 <div className="mb-2">
                                     <span className="font-semibold text-gray-700">Email:</span>{" "}
@@ -63,11 +54,14 @@ const Orders = () => {
                                 </div>
                                 <div className="mb-2">
                                     <span className="font-semibold text-gray-700">Address:</span>{" "}
-                                    <span className="text-gray-600">{order.address}</span>
+                                    <span className="text-gray-600">
+                                        {order.address.address},{order.address.city},{order.address.state},{order.address.country},{order.address.pincode},MOB-{order.address.mobile}
+                                    </span>
                                 </div>
+
                                 <div className="mb-2">
                                     <span className="font-semibold text-gray-700">Product:</span>{" "}
-                                    <span className="text-gray-600">{order.product}</span>
+                                    <span className="text-gray-600">{order.cartId}</span>
                                 </div>
                                 <div className="mb-2">
                                     <span className="font-semibold text-gray-700">Price:</span>{" "}
@@ -77,15 +71,15 @@ const Orders = () => {
                                 </div>
                                 <div className="mb-2">
                                     <span className="font-semibold text-gray-700">Time:</span>{" "}
-                                    <span className="text-gray-600">{order.time}</span>
+                                    <span className="text-gray-600">{moment(order.createdAt.toDate()).format('DD MMM YYYY, hh:mm:ss A')}</span>
                                 </div>
 
                                 <div
                                     className={`mt-4 text-center py-2 px-3 rounded-xl font-semibold text-sm ${order.status === "Delivered"
-                                            ? "bg-green-100 text-green-700"
-                                            : order.status === "Pending"
-                                                ? "bg-yellow-100 text-yellow-700"
-                                                : "bg-blue-100 text-blue-700"
+                                        ? "bg-green-100 text-green-700"
+                                        : order.status === "pending"
+                                            ? "bg-yellow-100 text-yellow-700"
+                                            : "bg-blue-100 text-blue-700"
                                         }`}
                                 >
                                     {order.status}

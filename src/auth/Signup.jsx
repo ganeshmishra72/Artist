@@ -3,13 +3,16 @@ import logo from '/artist.jpeg'
 import { Link, useNavigate } from 'react-router-dom'
 import firebaseartist from '../firebase/firebaseartist-config'
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { getFirestore, addDoc, collection, serverTimestamp } from 'firebase/firestore'
 
+const db = getFirestore(firebaseartist)
 const auth = getAuth(firebaseartist)
 const googleProvider = new GoogleAuthProvider()
 const Login = () => {
 
     const navigate = useNavigate()
     const [loading, setloading] = useState(false)
+
     const [fromValue, setFromvalue] = useState({
         username: '',
         email: '',
@@ -30,11 +33,14 @@ const Login = () => {
             setloading(true)
             const signupData = await createUserWithEmailAndPassword(auth, fromValue.email, fromValue.password)
             await updateProfile(auth.currentUser, { displayName: fromValue.username })
-            new swal({
-                icon: 'success',
-                title: 'Successfully Account Created'
+            await addDoc(collection(db, 'users'), {
+                email: fromValue.email,
+                customerId: signupData.user.uid,
+                role: "user",
+                createdAt: serverTimestamp()
             })
-            navigate('/login')
+            navigate('/')
+
 
         } catch (error) {
             new swal({
@@ -47,6 +53,9 @@ const Login = () => {
             setloading(false)
         }
     }
+
+
+
 
     const handelGoogleLogin = async () => {
         try {
@@ -64,6 +73,8 @@ const Login = () => {
             })
         }
     }
+
+
     return (
         <div className='h-screen flex justify-center p-4 items-center' style={{ backgroundImage: `url(${logo})` }}>
             <div className='bg-black/80  rounded-lg  p-4 animate__animated animate__zoomIn '>

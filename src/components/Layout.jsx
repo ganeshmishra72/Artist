@@ -4,10 +4,15 @@ import profile from '/avatr.svg'
 import firebaseartist from '../firebase/firebaseartist-config'
 import { Link } from 'react-router-dom'
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
+import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore'
 const auth = getAuth(firebaseartist)
-const Layout = ({ children }) => {
+const db = getFirestore(firebaseartist)
+const Layout = ({ children, update }) => {
     const [session, setSession] = useState(null)
     const [isLogin, setIslogin] = useState(false)
+    const [cartCount, setCartCount] = useState(0)
+    const [profileImage, setProfileImage] = useState('');
+
     const [isDailog, setIsDailog] = useState(false)
     const [isSlid, setIsslide] = useState(0)
     const menu = [
@@ -54,6 +59,7 @@ const Layout = ({ children }) => {
             href: '/contact'
         }
     ]
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -64,6 +70,49 @@ const Layout = ({ children }) => {
             }
         })
     }, [])
+    useEffect(() => {
+        if (session) {
+
+            const req = async () => {
+                const col = collection(db, 'carts')
+                const q = query(col, where('userid', '==', session.uid))
+                const sanpshot = await getDocs(q)
+                setCartCount(sanpshot.size);
+            }
+            req()
+        }
+    }, [session, update])
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            if (!session?.uid) return;
+
+            const userRef = collection(db, "users");
+            const q = query(userRef, where("customerId", "==", session.uid));
+            const snapshot = await getDocs(q);
+
+            if (!snapshot.empty) {
+                const userData = snapshot.docs[0].data();
+                if (userData.profileImage) {
+                    setProfileImage(userData.profileImage);
+                }
+            }
+        };
+
+        fetchUserProfile();
+    }, [session]);
+
+    if (session === null) {
+        return (
+            <div className='bg-gray-200 h-full w-full fixed top-0 left-0 flex justify-center items-center'>
+                <span className="relative flex size-6">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+                    <span className="relative inline-flex size-6 rounded-full bg-sky-500"></span>
+                </span>
+            </div>
+        )
+
+    }
     return (
         <>
             <div className='md:block hidden bg-gradient-to-r from-[#111827] to-[#1E293B] min-h-screen'>
@@ -80,16 +129,24 @@ const Layout = ({ children }) => {
                             ))
                         }
                         {
+                            (session && cartCount > 0) &&
+                            <Link to={'/cart'} className='relative'>
+                                <i className='ri-shopping-cart-line text-2xl text-white'></i>
+                                <div className='absolute -top-2 -right-2 bg-rose-600 font-bold text-white rounded-full size-5 text-xs flex justify-center  items-center'>{cartCount}</div>
+                            </Link>
+                        }
+                        {
                             session &&
-                            <div className='relative'>
+                            <div className='relative mt-2'>
                                 <button onClick={() => setIsDailog(!isDailog)}>
-                                    <img src={profile} alt="" className='w-12  border border-cyan-600 rounded-full' />
+                                    <img src={profileImage || profile} alt="" className='w-12  border border-cyan-600 rounded-full' />
                                 </button>
                                 {
                                     isDailog &&
                                     <div className='border border-slate-500 bg-slate-800 rounded-lg shadow py-6 px-4  absolute right-3 top-15 animate__animated animate__zoomIn text-center text-white '>
-                                        <p className='text-xl capitalize'>{session.displayname ? session.displayname : "Admin"}</p>
-                                        <p>{session.email}</p>
+                                        <Link to={'/profile'} className=' flex items-center'>
+                                            <i className='ri-user-line mr-2'></i> Profile
+                                        </Link>
                                         <button onClick={() => signOut(auth)}>
                                             <i className='ri-logout-circle-line mr-2'></i>
                                             Logout
@@ -164,7 +221,7 @@ const Layout = ({ children }) => {
             </div>
 
             <div className='md:hidden bg-gradient-to-r from-[#111827] to-[#1E293B] min-h-screen'>
-                <nav className='bg-gray-700/25 md:px-8 md:py-0.5 p-4 backdrop-blur-2xl flex justify-between items-center shadow-lg sticky top-0 right-0 z-[9999]'>
+                <nav className='bg-gray-700/25 md:px-8 md:py-0.5 p-4 backdrop-blur-2xl flex justify-between items-center shadow-lg sticky top-0 right-0 z-10'>
                     <img src={logo} alt="" className='w-25' />
                     {
                         isSlid ?
@@ -178,7 +235,7 @@ const Layout = ({ children }) => {
                     }
 
                 </nav>
-                <aside className='bg-gray-900 shadow-lg fixed top-0 left-0 z-10 h-full flex flex-col transition-all duration-200 overflow-hidden' style={{ width: isSlid }}>
+                <aside className='bg-gray-900 shadow-lg fixed top-0 left-0 z-20 h-full flex flex-col transition-all duration-200 overflow-hidden' style={{ width: isSlid }}>
 
                     <div className='flex flex-col mt-8'>
                         {
@@ -194,15 +251,16 @@ const Layout = ({ children }) => {
                             session &&
                             <div className='relative py-4 px-6' >
                                 <button onClick={() => setIsDailog(!isDailog)}>
-                                    <img src={profile} alt="" className='w-12  border border-cyan-600 rounded-full' />
+                                    <img src={profileImage || profile} alt="" className='w-12  border border-cyan-600 rounded-full' />
                                 </button>
                                 {
                                     isDailog &&
-                                    <div className='border border-slate-500 rounded-lg shadow py-6 px-2  absolute right-3 top-18 animate__animated animate__zoomIn text-center text-white w-[220px]' >
-                                        <p className='text-xl capitalize'>{session.displayname ? session.displayname : "Admin"}</p>
-                                        <p>{session.email}</p>
+                                    <div className='border border-slate-500 rounded-lg shadow py-6 px-4  absolute left-14 top-18 animate__animated animate__zoomIn   text-white ' >
+                                        <Link to={'/profile'} className=' flex items-center'>
+                                            <i className='ri-user-line mr-2'></i> Profile
+                                        </Link>
                                         <button onClick={() => signOut(auth)}>
-                                            <i className='ri-logout-circle-line mr-2'></i>
+                                            <i className='ri-logout-circle-line mr-2 text-left'></i>
                                             Logout
                                         </button>
                                     </div>
