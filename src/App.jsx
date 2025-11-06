@@ -5,7 +5,7 @@ import Signup from './auth/Signup'
 import 'remixicon/fonts/remixicon.css'
 import swal from 'sweetalert'
 import 'animate.css'
-import Preguard from './guard/PreGuard'
+import Preguard from './guard/Preguard'
 
 import Home from './components/Home'
 import Explore from './components/Explore'
