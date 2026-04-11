@@ -115,20 +115,36 @@ Follow these steps to get the Artist application up and running on your local ma
 ## 📁 Project Structure
 
 ```
-Artist/
-├── public/                 # Static assets (e.g., index.html favicon)
-│   └── vite.svg
-├── src/                    # Main application source code
-│   ├── assets/             # Images, fonts, other static files
-│   ├── components/         # Reusable React components
-│   ├── App.jsx             # Main application component
-│   └── main.jsx            # Entry point for React application
-├── .gitignore              # Files/directories to ignore in Git
-├── index.html              # Main HTML entry file
-├── package.json            # Project metadata and dependencies
-├── package-lock.json       # npm dependency lock file
-├── eslint.config.js        # ESLint configuration
-└── vite.config.js          # Vite build configuration
+📦src
+ ┣ 📂Admin
+ ┃ ┣ 📜AdminArtist.jsx
+ ┃ ┣ 📜Art.jsx
+ ┃ ┣ 📜Dashboard.jsx
+ ┃ ┣ 📜Layout.jsx
+ ┃ ┣ 📜Orders.jsx
+ ┃ ┗ 📜Setting.jsx
+ ┣ 📂auth
+ ┃ ┣ 📜Login.jsx
+ ┃ ┗ 📜Signup.jsx
+ ┣ 📂components
+ ┃ ┣ 📜Artist.jsx
+ ┃ ┣ 📜Cart.jsx
+ ┃ ┣ 📜Contact.jsx
+ ┃ ┣ 📜Explore.jsx
+ ┃ ┣ 📜Home.jsx
+ ┃ ┣ 📜Layout.jsx
+ ┃ ┗ 📜Profile.jsx
+ ┣ 📂Details
+ ┃ ┣ 📜ArtDetails.jsx
+ ┃ ┗ 📜ArtistDetails.jsx
+ ┣ 📂firebase
+ ┃ ┗ 📜firebaseartist-config.js
+ ┣ 📂guard
+ ┃ ┣ 📜Adminguard.jsx
+ ┃ ┗ 📜Preguard.jsx
+ ┣ 📜App.jsx
+ ┣ 📜index.css
+ ┗ 📜main.jsx
 ```
 
 ## ⚙️ Configuration
